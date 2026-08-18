@@ -177,6 +177,7 @@ if tab == 0:
         df_ica    = run_query(QUERIES["ica_total_lifetime"],     schema)
         df_vol    = run_query(QUERIES["case_volume_ytd"],       schema)
         df_vol_mo = run_query(QUERIES["case_volume_monthly"],   schema)
+        df_eng    = run_query(QUERIES["engagement_metrics"],    schema)
 
     c1,c2,c3,c4,c5 = st.columns(5)
     if not df_frt.empty:
@@ -233,6 +234,45 @@ if tab == 0:
             f"Case volume: Jan {curr_yr} – present · "
             "Excludes bot cases (sl_is_bot=false) and deleted cases (s_deleted_at IS NULL)"
         )
+
+    # ── Engagement metrics ────────────────────────────────────────────────────
+    if not df_eng.empty:
+        import datetime
+        curr_yr = datetime.datetime.now().year
+        st.markdown("#### 📊 Annual engagement summary")
+        st.caption(f"Jan {curr_yr} to present · Platform activity across all SupportLogic modules")
+
+        def _fmt(v):
+            try:
+                n = int(float(v))
+                if n >= 1000000: return f"{n/1000000:.1f}M"
+                if n >= 1000:    return f"{n/1000:.0f}K"
+                return f"{n:,}"
+            except: return "—"
+
+        row = df_eng.iloc[0]
+        e1,e2,e3,e4 = st.columns(4)
+        e1.metric("Interactions processed",     _fmt(row.get("annual_interactions",0)), "Comments scored by NLP",         delta_color="off")
+        e2.metric("Alerts fired (annual)",       _fmt(row.get("annual_alerts",0)),       "Email + MS Teams + Slack",        delta_color="off")
+        e3.metric("Signals extracted",           _fmt(row.get("annual_signals",0)),      "Sentiment + urgency + topics",   delta_color="off")
+        e4.metric("AI summaries generated",      _fmt(row.get("annual_summaries",0)),    "Account + case + cohort",        delta_color="off")
+
+        e5,e6,e7,e8 = st.columns(4)
+        ica_val = int(float(row.get("projected_annual_ica",0) or 0))
+        e5.metric("ICA assignments (proj.)",
+                  _fmt(ica_val) if ica_val > 0 else "Not deployed",
+                  "Last month × 12" if ica_val > 0 else "ICA not active",
+                  delta_color="off")
+        e6.metric("Auto QA performed",           _fmt(row.get("annual_auto_qa",0)),      "Elevate auto-scoring",           delta_color="off")
+        e7.metric("Resolve API queries",         _fmt(row.get("annual_resolve_queries",0)),"xFind knowledge searches",     delta_color="off")
+        try:
+            from utils.pendo_conn import get_page_views
+            _pid = customer.get("pendo_id", customer_name.lower())
+            _dp  = get_page_views(_pid, 30)
+            _mau = _dp["visitorId"].nunique() if not _dp.empty and "visitorId" in _dp.columns else 0
+            e8.metric("MAU (Pendo iframe)",      f"{_mau:,}",                           "Unique users last 30d",          delta_color="off")
+        except Exception:
+            e8.metric("MAU", "—", "Pendo not configured", delta_color="off")
 
     st.divider()
     # ── Monthly volume chart ─────────────────────────────────────────────────

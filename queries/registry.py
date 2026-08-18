@@ -1,5 +1,58 @@
 QUERIES = {
 
+
+    "engagement_metrics": """
+        SELECT
+            -- Interactions (comments scored by NLP)
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.sl_impulse_score_by_channel_2020_02
+             WHERE _sl_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            ) AS annual_interactions,
+
+            -- Alerts (email + teams + slack combined)
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.alerts
+             WHERE s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            ) AS annual_alerts,
+
+            -- ICA auto-assignments (last month × 12 for projection)
+            (SELECT COUNT(DISTINCT object_id_reference) * 12
+             FROM PIPE_DATABASE.<SCHEMA>.std_event_log
+             WHERE event_source = 'ICA_AUTO_ASSIGNMENT'
+               AND object_id_reference IS NOT NULL
+               AND s_created_at >= DATE_TRUNC('MONTH', DATEADD(MONTH,-1,CURRENT_DATE()))
+               AND s_created_at < DATE_TRUNC('MONTH', CURRENT_DATE())
+            ) AS projected_annual_ica,
+
+            -- Auto QA
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.std_ticket_review
+             WHERE s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+               AND _fivetran_deleted = FALSE
+            ) AS annual_auto_qa,
+
+            -- Resolve/xFind API queries
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.std_object_action
+             WHERE (action_type ILIKE '%resolve%'
+                    OR action_type ILIKE '%xfind%'
+                    OR action_type ILIKE '%search%'
+                    OR action_type ILIKE '%knowledge%')
+               AND s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            ) AS annual_resolve_queries,
+
+            -- AI Summaries (case + account + cohort + escalation)
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.std_generated_summary
+             WHERE s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            ) AS annual_summaries,
+
+            -- Signals extracted (unique spans/signals from NLP)
+            (SELECT COUNT(*)
+             FROM PIPE_DATABASE.<SCHEMA>.sl_impulse_score_by_channel_2020_02
+             WHERE _sl_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            ) AS annual_signals
+    """,
     "case_volume_ytd": """
         SELECT
             COUNT(*)                                                AS ytd_cases,
