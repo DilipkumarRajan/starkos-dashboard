@@ -329,3 +329,4 @@ QUERY_CATALOG = [
     {"id":"account_summaries_insight","name":"Account summaries insight",      "tab":"Pendo",         "agent":"Summarization Agent",  "tables":["STD_GENERATED_SUMMARY"],                 "status":"stable"},
     {"id":"at_risk_accounts_insight", "name":"At-risk accounts insight",       "tab":"Pendo",         "agent":"Account Health Agent", "tables":["ML_PREDICTION"],                         "status":"stable"},
 ]
+
