@@ -279,4 +279,17 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "CrowdStrike": {
+        "schema":    "CROWDSTRIKE_PUBLIC",
+        "pendo_id":  "crowdstrike",
+        "go_live":   "2024-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "722K cases. Data from Jan 2024.",
+        "gcp_hostname": "crowdstrike",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }
