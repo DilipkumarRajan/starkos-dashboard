@@ -200,8 +200,8 @@ CUSTOMERS = {
     },
 
     "NTT Data": {
-        "schema":    "NTTSEA_PUBLIC",
-        "pendo_id":  "nttsea",
+        "schema":    "NTTLTD_EU_PUBLIC",
+        "pendo_id":  "nttltd",
         "go_live":   None,
         "csm":       "",
         "sa":        "",
