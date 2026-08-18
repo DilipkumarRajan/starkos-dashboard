@@ -3,10 +3,11 @@ QUERIES = {
 
     "engagement_metrics": """
         SELECT
-            -- Interactions (comments scored by NLP)
+            -- Interactions processed (comments created YTD from uds_comment)
+            -- uds_comment = all inbound/outbound comments synced from CRM
             (SELECT COUNT(*)
-             FROM PIPE_DATABASE.<SCHEMA>.sl_impulse_score_by_channel_2020_02
-             WHERE _sl_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+             FROM PIPE_DATABASE.<SCHEMA>.uds_comment
+             WHERE sl_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
             ) AS annual_interactions,
 
             -- Alerts (email + teams + slack combined)
@@ -47,10 +48,12 @@ QUERIES = {
              WHERE s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
             ) AS annual_summaries,
 
-            -- Signals extracted (unique spans/signals from NLP)
-            (SELECT COUNT(*)
-             FROM PIPE_DATABASE.<SCHEMA>.sl_impulse_score_by_channel_2020_02
-             WHERE _sl_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
+            -- Signals extracted (individual NLP span detections from span_doc_diverse)
+            -- Each span = one detected signal (sentiment, urgency, frustration etc)
+            -- Source: Confluence "Select Detected Signals across All Customers"
+            (SELECT SUM(ARRAY_SIZE(PARSE_JSON(spans)))
+             FROM PIPE_DATABASE.<SCHEMA>.span_doc_diverse
+             WHERE s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
             ) AS annual_signals
     """,
     "case_volume_ytd": """
