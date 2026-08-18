@@ -155,3 +155,4 @@ The app uses `SNOWFLAKE_LEARNING_WH` by default. If the warehouse is suspended, 
 For production use, consider switching to `BI_REPORT_WH` (requires RESUME privilege for the service user — raise with SRE) or setting `AUTO_RESUME = TRUE` on the warehouse.
 
 Heavy queries (follow-up response time, ICA assignment split) may take 30–60s on a cold warehouse. These are marked `"status": "slow"` in the catalog and shown with a warning in the Query Explorer.
+# Tue Aug 18 16:03:25 IST 2026
