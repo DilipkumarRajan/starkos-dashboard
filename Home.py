@@ -292,19 +292,22 @@ if tab == 0:
                   s if v not in ("0","—") else "Elevate not deployed",
                   delta_color="off")
 
-        # Resolve API from XFIND DB
+        # Resolve API from XFIND DB — YTD with projection
         xfind_schemas = customer.get("xfind_schemas", [])
         if xfind_schemas:
             try:
-                xfind_total = 0
+                xfind_ytd = 0
                 for xs in xfind_schemas:
                     _xf = run_query(
-                        f"SELECT COUNT(*) AS cnt FROM XFIND.{xs}.CORE_QUERYACTIVITY",
+                        f"""SELECT COUNT(*) AS cnt
+                            FROM XFIND.{xs}.CORE_QUERYACTIVITY
+                            WHERE CREATED_AT >= DATE_TRUNC('YEAR', CURRENT_DATE())""",
                         schema
                     )
-                    xfind_total += int(_xf["cnt"].iloc[0])
-                e7.metric("Resolve API calls", f"{xfind_total:,}",
-                          "XFIND.CORE_QUERYACTIVITY · All time", delta_color="off")
+                    xfind_ytd += int(_xf["cnt"].iloc[0])
+                xfind_proj = int(xfind_ytd * ann_factor)
+                e7.metric("Resolve API calls (YTD)", f"{_fmt(xfind_ytd)}",
+                          f"Proj. annual: {_fmt(xfind_proj)}", delta_color="off")
             except Exception as _xe:
                 e7.metric("Resolve API calls", "Error", str(_xe)[:40], delta_color="off")
         else:
