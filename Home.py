@@ -325,13 +325,14 @@ if tab == 0:
         # Row 3 — Dashboard MAU + Agent count
         e9,e10,_,__ = st.columns(4)
         try:
-            from utils.pendo_conn import get_visitor_count
+            from utils.pendo_conn import get_page_views
             _pid2 = customer.get("pendo_id", customer_name.lower())
-            _dmau = get_visitor_count(_pid2)
-            e9.metric("Dashboard visitors (lifetime)", f"{_dmau:,}",
-                      "Total unique visitors · Pendo", delta_color="off")
+            _dp90 = get_page_views(_pid2, 90)
+            _dmau = _dp90["visitorId"].nunique() if not _dp90.empty and "visitorId" in _dp90.columns else 0
+            e9.metric("Dashboard visitors (90d)", f"{_dmau:,}",
+                      "Unique agents who opened SL · last 90d", delta_color="off")
         except Exception:
-            e9.metric("Dashboard visitors", "—", "Pendo not configured", delta_color="off")
+            e9.metric("Dashboard visitors (90d)", "—", "Pendo not configured", delta_color="off")
 
         try:
             _ag = run_query("""
@@ -343,8 +344,8 @@ if tab == 0:
                   AND sl_assignee_id IS NOT NULL
             """, schema)
             _agc = int(_ag["agent_count"].iloc[0])
-            e10.metric("Est. active agents (60d)", f"{_agc:,}",
-                       "Unique assignees · last 60 days", delta_color="off")
+            e10.metric("Unique assignees (60d)", f"{_agc:,}",
+                       "Unique users cases were assigned to · last 60d", delta_color="off")
         except Exception:
             e10.metric("Est. active agents", "—", "Query failed", delta_color="off")
     st.divider()
