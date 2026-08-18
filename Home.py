@@ -1318,6 +1318,15 @@ elif tab == 7:
                f"Pages: {len(page_map):,} · Features: {len(feature_map):,}")
 
 elif tab == 8:
+    st.markdown("""
+<div style='text-align:center;padding:80px 20px'>
+  <div style='font-size:48px;margin-bottom:16px'>🔧</div>
+  <div style='font-size:20px;font-weight:600;color:#e6edf3;margin-bottom:8px'>Under Construction</div>
+  <div style='font-size:13px;color:#8b949e;line-height:1.8'>
+    This section is reserved for technical use and will be available in a future update.
+  </div>
+</div>""", unsafe_allow_html=True)
+    st.stop()
 
         st.markdown("""
 <div style='text-align:center;padding:80px 20px'>
@@ -1383,6 +1392,15 @@ Available chart types: `line_chart`, `area_chart`, `bar_chart`, `combo_chart`, `
 # ════════════════════════════════════════════════════════════════════════════
 
 elif tab == 9:
+    st.markdown("""
+<div style='text-align:center;padding:80px 20px'>
+  <div style='font-size:48px;margin-bottom:16px'>🔧</div>
+  <div style='font-size:20px;font-weight:600;color:#e6edf3;margin-bottom:8px'>Under Construction</div>
+  <div style='font-size:13px;color:#8b949e;line-height:1.8'>
+    This section is reserved for technical use and will be available in a future update.
+  </div>
+</div>""", unsafe_allow_html=True)
+    st.stop()
 
         st.markdown("""
 <div style='text-align:center;padding:80px 20px'>
