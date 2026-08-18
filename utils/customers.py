@@ -40,6 +40,7 @@ CUSTOMERS = {
 
     "NICE": {
         "schema":    "NICE_PUBLIC",
+        "xfind_schemas": ["NICE_PUBLIC"],
         "pendo_id":  "nice",
         "go_live":   "2022-01-01",
         "csm":       "Manochitra Janakaraj",
@@ -188,6 +189,7 @@ CUSTOMERS = {
 
     "Cvent": {
         "schema":    "CVENT_PUBLIC",
+        "xfind_schemas": ["CVENTAGENT_PUBLIC", "CVENTPORTAL_PUBLIC"],
         "pendo_id":  "cvent",
         "go_live":   None,
         "csm":       "",

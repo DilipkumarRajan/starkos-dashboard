@@ -238,9 +238,17 @@ if tab == 0:
     # ── Engagement metrics ────────────────────────────────────────────────────
     if not df_eng.empty:
         import datetime
-        curr_yr = datetime.datetime.now().year
+        from datetime import date
+        curr_yr    = datetime.datetime.now().year
+        today      = date.today()
+        day_of_year = today.timetuple().tm_yday
+        ann_factor  = 365 / day_of_year
+
         st.markdown("#### 📊 Annual engagement summary")
-        st.caption(f"Jan {curr_yr} to present · Platform activity across all SupportLogic modules")
+        st.caption(
+            f"Jan {curr_yr} to present ({day_of_year} days elapsed) · "
+            f"Projected annual = YTD × {ann_factor:.1f} · All SupportLogic modules"
+        )
 
         def _fmt(v):
             try:
@@ -250,30 +258,95 @@ if tab == 0:
                 return f"{n:,}"
             except: return "—"
 
-        row = df_eng.iloc[0]
-        e1,e2,e3,e4 = st.columns(4)
-        e1.metric("Interactions processed",     _fmt(row.get("annual_interactions",0)), "Comments scored by NLP",         delta_color="off")
-        e2.metric("Alerts fired (annual)",       _fmt(row.get("annual_alerts",0)),       "Email + MS Teams + Slack",        delta_color="off")
-        e3.metric("Signals extracted",           _fmt(row.get("annual_signals",0)),      "Sentiment + urgency + topics",   delta_color="off")
-        e4.metric("AI summaries generated",      _fmt(row.get("annual_summaries",0)),    "Account + case + cohort",        delta_color="off")
+        def _proj(v):
+            try:
+                n = int(float(v))
+                proj = int(n * ann_factor)
+                return _fmt(n), f"Proj. annual: {_fmt(proj)}"
+            except: return "—", ""
 
+        row = df_eng.iloc[0]
+
+        # Row 1 — Core processing
+        e1,e2,e3,e4 = st.columns(4)
+        v,s = _proj(row.get("annual_interactions",0))
+        e1.metric("Interactions processed", v, s, delta_color="off")
+        v,s = _proj(row.get("annual_alerts",0))
+        e2.metric("Alerts fired (YTD)", v, s, delta_color="off")
+        v,s = _proj(row.get("annual_signals",0))
+        e3.metric("Signals extracted", v, s, delta_color="off")
+        v,s = _proj(row.get("annual_summaries",0))
+        e4.metric("AI summaries generated", v, s, delta_color="off")
+
+        # Row 2 — Feature metrics
         e5,e6,e7,e8 = st.columns(4)
         ica_val = int(float(row.get("projected_annual_ica",0) or 0))
-        e5.metric("ICA assignments (proj.)",
-                  _fmt(ica_val) if ica_val > 0 else "Not deployed",
-                  "Last month × 12" if ica_val > 0 else "ICA not active",
+        if ica_val > 0:
+            e5.metric("ICA assignments (proj.)", _fmt(ica_val), "Last full month × 12", delta_color="off")
+        else:
+            e5.metric("ICA assignments", "Not deployed", "ICA not active", delta_color="off")
+
+        v,s = _proj(row.get("annual_auto_qa",0))
+        e6.metric("Auto QA performed",
+                  v if v not in ("0","—") else "Not active",
+                  s if v not in ("0","—") else "Elevate not deployed",
                   delta_color="off")
-        e6.metric("Auto QA performed",           _fmt(row.get("annual_auto_qa",0)),      "Elevate auto-scoring",           delta_color="off")
-        e7.metric("Resolve API queries",         _fmt(row.get("annual_resolve_queries",0)),"xFind knowledge searches",     delta_color="off")
+
+        # Resolve API from XFIND DB
+        xfind_schemas = customer.get("xfind_schemas", [])
+        if xfind_schemas:
+            try:
+                xfind_total = 0
+                for xs in xfind_schemas:
+                    _xf = run_query(
+                        f"SELECT COUNT(*) AS cnt FROM XFIND.{xs}.CORE_QUERYACTIVITY",
+                        schema
+                    )
+                    xfind_total += int(_xf["cnt"].iloc[0])
+                e7.metric("Resolve API calls", f"{xfind_total:,}",
+                          "XFIND.CORE_QUERYACTIVITY · All time", delta_color="off")
+            except Exception as _xe:
+                e7.metric("Resolve API calls", "Error", str(_xe)[:40], delta_color="off")
+        else:
+            e7.metric("Resolve API calls", "Not deployed",
+                      "xFind not configured", delta_color="off")
+
+        # Iframe MAU from Pendo
         try:
             from utils.pendo_conn import get_page_views
             _pid = customer.get("pendo_id", customer_name.lower())
             _dp  = get_page_views(_pid, 30)
-            _mau = _dp["visitorId"].nunique() if not _dp.empty and "visitorId" in _dp.columns else 0
-            e8.metric("MAU (Pendo iframe)",      f"{_mau:,}",                           "Unique users last 30d",          delta_color="off")
+            _imau = _dp["visitorId"].nunique() if not _dp.empty and "visitorId" in _dp.columns else 0
+            e8.metric("Iframe MAU (last 30d)", f"{_imau:,}",
+                      "Agents via CRM iframe · Pendo", delta_color="off")
         except Exception:
-            e8.metric("MAU", "—", "Pendo not configured", delta_color="off")
+            e8.metric("Iframe MAU", "—", "Pendo not configured", delta_color="off")
 
+        # Row 3 — Dashboard MAU + Agent count
+        e9,e10,_,__ = st.columns(4)
+        try:
+            from utils.pendo_conn import get_visitor_count
+            _pid2 = customer.get("pendo_id", customer_name.lower())
+            _dmau = get_visitor_count(_pid2)
+            e9.metric("Dashboard visitors (lifetime)", f"{_dmau:,}",
+                      "Total unique visitors · Pendo", delta_color="off")
+        except Exception:
+            e9.metric("Dashboard visitors", "—", "Pendo not configured", delta_color="off")
+
+        try:
+            _ag = run_query("""
+                SELECT COUNT(DISTINCT sl_assignee_id) AS agent_count
+                FROM PIPE_DATABASE.<SCHEMA>.case_summary
+                WHERE sl_created_at >= DATEADD(DAY,-60,CURRENT_DATE())
+                  AND sl_is_bot = FALSE
+                  AND is_deleted = FALSE
+                  AND sl_assignee_id IS NOT NULL
+            """, schema)
+            _agc = int(_ag["agent_count"].iloc[0])
+            e10.metric("Est. active agents (60d)", f"{_agc:,}",
+                       "Unique assignees · last 60 days", delta_color="off")
+        except Exception:
+            e10.metric("Est. active agents", "—", "Query failed", delta_color="off")
     st.divider()
     # ── Monthly volume chart ─────────────────────────────────────────────────
     if not df_vol_mo.empty:

@@ -32,15 +32,9 @@ QUERIES = {
                AND _fivetran_deleted = FALSE
             ) AS annual_auto_qa,
 
-            -- Resolve/xFind API queries
-            (SELECT COUNT(*)
-             FROM PIPE_DATABASE.<SCHEMA>.std_object_action
-             WHERE (action_type ILIKE '%resolve%'
-                    OR action_type ILIKE '%xfind%'
-                    OR action_type ILIKE '%search%'
-                    OR action_type ILIKE '%knowledge%')
-               AND s_created_at >= DATE_TRUNC('YEAR', CURRENT_DATE())
-            ) AS annual_resolve_queries,
+            -- Resolve/xFind API queries placeholder
+            -- Actual count fetched separately from XFIND DB in Home.py
+            0 AS annual_resolve_queries,
 
             -- AI Summaries (case + account + cohort + escalation)
             (SELECT COUNT(*)
