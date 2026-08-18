@@ -281,7 +281,7 @@ CUSTOMERS = {
 
     "CrowdStrike": {
         "schema":    "CROWDSTRIKE_PUBLIC",
-        "pendo_id":  "crowdstrike",
+        "pendo_id":  "CrowdStrike",
         "go_live":   "2024-01-01",
         "csm":       "",
         "sa":        "",

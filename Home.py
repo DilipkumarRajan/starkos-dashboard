@@ -332,8 +332,8 @@ if tab == 0:
             _pid2 = customer.get("pendo_id", customer_name.lower())
             _dp90 = get_page_views(_pid2, 90)
             _dmau = _dp90["visitorId"].nunique() if not _dp90.empty and "visitorId" in _dp90.columns else 0
-            e9.metric("Dashboard visitors (90d)", f"{_dmau:,}",
-                      "Unique agents who opened SL · last 90d", delta_color="off")
+            e9.metric("Active UI users (90d)", f"{_dmau:,}",
+                      "Unique users who opened SL UI · last 90d", delta_color="off")
         except Exception:
             e9.metric("Dashboard visitors (90d)", "—", "Pendo not configured", delta_color="off")
 
