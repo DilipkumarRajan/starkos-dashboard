@@ -1,0 +1,9 @@
+.env
+*.p8
+*.pem
+__pycache__/
+.streamlit/secrets.toml
+.DS_Store
+*.pyc
+.venv/
+venv/
