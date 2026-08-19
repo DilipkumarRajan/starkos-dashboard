@@ -1091,20 +1091,24 @@ elif tab == 7:
     from utils.charts import COLORS, area_chart, bar_chart, line_chart, donut_chart
     from queries.registry import QUERIES
 
-    pendo_id = customer.get("pendo_id", customer_name.lower())
+    pendo_id  = customer.get("pendo_id", customer_name.lower())
+    pendo_ids = customer.get("pendo_ids", [pendo_id])
     col_d, _ = st.columns([1, 4])
     days = col_d.selectbox("Date range", [7, 14, 30, 60, 90], index=2,
                            format_func=lambda x: f"Last {x} days")
 
     with st.spinner("Loading Pendo data..."):
+        import pandas as _pd2
         page_map    = get_page_map()
         feature_map = get_feature_map()
-        visitors    = get_visitor_count(pendo_id)
-        df_pages    = get_page_views(pendo_id, days)
-        df_features = get_feature_events(pendo_id, days)
+        visitors    = sum(get_visitor_count(p) for p in pendo_ids)
+        _pf = [get_page_views(p, days) for p in pendo_ids]
+        _ff = [get_feature_events(p, days) for p in pendo_ids]
+        df_pages    = _pd2.concat([x for x in _pf if not x.empty], ignore_index=True).drop_duplicates() if any(not x.empty for x in _pf) else _pd2.DataFrame()
+        df_features = _pd2.concat([x for x in _ff if not x.empty], ignore_index=True).drop_duplicates() if any(not x.empty for x in _ff) else _pd2.DataFrame()
 
     if df_pages.empty and df_features.empty:
-        st.warning(f"No Pendo data for `{pendo_id}` in last {days} days.", icon="⚠️")
+        st.warning(f"No Pendo data for `{", ".join(pendo_ids)}` in last {days} days.", icon="⚠️")
         st.stop()
 
     # ── Derived metrics ───────────────────────────────────────────────────────
