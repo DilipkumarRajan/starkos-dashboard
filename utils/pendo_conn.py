@@ -292,3 +292,39 @@ def country_breakdown(df_geo: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:
               .sort_values("users", ascending=False)
               .head(top_n)
     )
+
+
+def get_combined_page_views(pendo_ids: list, days: int = 30) -> pd.DataFrame:
+    """
+    Fetch page views for multiple Pendo account IDs and combine.
+    Used for customers with fragmented Pendo accounts (e.g. Qlik has qlik + Qlik).
+    """
+    frames = []
+    for pid in pendo_ids:
+        try:
+            df = get_page_views(pid, days)
+            if not df.empty:
+                df["pendo_account"] = pid
+                frames.append(df)
+        except Exception:
+            pass
+    if not frames:
+        return pd.DataFrame()
+    combined = pd.concat(frames, ignore_index=True)
+    # Deduplicate visitors that appear in both accounts
+    combined = combined.drop_duplicates(subset=["visitorId", "pageId", "date"])
+    return combined
+
+
+def get_combined_visitor_count(pendo_ids: list, days: int = 90) -> int:
+    """Get unique visitor count across multiple Pendo account IDs."""
+    all_visitors = set()
+    for pid in pendo_ids:
+        try:
+            df = get_page_views(pid, days)
+            if not df.empty and "visitorId" in df.columns:
+                all_visitors.update(df["visitorId"].unique())
+        except Exception:
+            pass
+    return len(all_visitors)
+

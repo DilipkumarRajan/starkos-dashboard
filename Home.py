@@ -316,12 +316,23 @@ if tab == 0:
 
         # Iframe MAU from Pendo
         try:
-            from utils.pendo_conn import get_page_views
-            _pid = customer.get("pendo_id", customer_name.lower())
-            _dp  = get_page_views(_pid, 30)
-            _imau = _dp["visitorId"].nunique() if not _dp.empty and "visitorId" in _dp.columns else 0
+            from utils.pendo_conn import get_page_views, get_combined_page_views
+            _pids = customer.get("pendo_ids", [customer.get("pendo_id", customer_name.lower())])
+            if len(_pids) > 1:
+                _dp = get_combined_page_views(_pids, 30)
+            else:
+                _dp = get_page_views(_pids[0], 30)
+            # Filter to iframe pages only
+            if not _dp.empty and "pageId" in _dp.columns:
+                _page_map = get_page_map() if "get_page_map" in dir() else {}
+                _iframe_df = _dp[_dp["pageId"].map(
+                    lambda x: "[IFrame]" in str(_page_map.get(x, x))
+                )] if _page_map else _dp
+                _imau = _iframe_df["visitorId"].nunique() if not _iframe_df.empty else 0
+            else:
+                _imau = 0
             e8.metric("Iframe MAU (last 30d)", f"{_imau:,}",
-                      "Agents via CRM iframe · Pendo", delta_color="off")
+                      "Agents via CRM iframe only · Pendo", delta_color="off")
         except Exception:
             e8.metric("Iframe MAU", "—", "Pendo not configured", delta_color="off")
 
