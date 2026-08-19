@@ -5,6 +5,14 @@ Returns structured highlights: meeting notes, outages, open issues, data sync al
 """
 
 CUSTOMER_CHANNELS = {
+    "Automation Anywhere": "C03FF1F2X1Q",
+    "Qlik":               "CRYKUMR88",
+    "Rubrik":             "CBRK79PEU",
+    "F5":                 "C09UVN09NTX",
+    "Fivetran":           "C014WA724LD",
+    "Braze":              "C074JBTUTRN",
+    "Phenom People":      "C031V2LE4BS",
+    "Grafana Labs":       "C0874FVLVJL",
     "AVEVA":     "C064QE64ZCY",
     "Hyland":    "C09G2AJ18G7",
     "NICE":      "C0565AP28LS",
