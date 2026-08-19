@@ -308,6 +308,7 @@ CUSTOMERS = {
     "Qlik": {
         "schema":    "QLIK2_PUBLIC",
         "pendo_id":  "qlik",
+        "pendo_ids": ["qlik", "Qlik"],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
