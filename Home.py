@@ -178,6 +178,7 @@ if tab == 0:
         df_vol    = run_query(QUERIES["case_volume_ytd"],       schema)
         df_vol_mo = run_query(QUERIES["case_volume_monthly"],   schema)
         df_eng    = run_query(QUERIES["engagement_metrics"],    schema)
+        df_fur    = run_query(QUERIES["followup_monthly"],      schema)
 
     c1,c2,c3,c4,c5 = st.columns(5)
     if not df_frt.empty:
@@ -404,7 +405,16 @@ if tab == 0:
                 thresholds=[{"range":[0,1],"color":COLORS["teal_light"]},
                             {"range":[1,2],"color":COLORS["amber_light"]},
                             {"range":[2,5],"color":COLORS["red_light"]}],label="%"),use_container_width=True)
-    if not df_frt.empty:
+    if not df_fur.empty:
+        with col_area:
+            st.markdown("**Follow-up response time — monthly (hrs)**")
+            st.plotly_chart(area_chart(df_fur,x="month",
+                y_cols=[
+                    {"col":"avg_followup_hours","name":"Avg follow-up (hrs)","color":COLORS["teal"],"fill":"rgba(15,110,86,0.1)"},
+                    {"col":"avg_max_followup_hours","name":"Max follow-up (hrs)","color":COLORS["amber"],"fill":"rgba(186,117,23,0.08)"},
+                ],
+                height=200),use_container_width=True)
+    elif not df_frt.empty:
         with col_area:
             st.markdown("**First response time — monthly (hrs)**")
             st.plotly_chart(area_chart(df_frt,x="month",

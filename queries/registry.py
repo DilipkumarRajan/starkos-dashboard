@@ -84,6 +84,20 @@ QUERIES = {
         GROUP BY 1 ORDER BY 1
     """,
 
+
+    "followup_monthly": """
+        SELECT
+            TO_CHAR(DATE_TRUNC('MONTH', sl_created_at), 'YYYY-MM') AS month,
+            ROUND(AVG(sl_last_follow_up_time_ms)/3600000, 1)  AS avg_followup_hours,
+            ROUND(AVG(sl_max_follow_up_time_ms)/3600000, 1)   AS avg_max_followup_hours,
+            COUNT(*) AS total_cases
+        FROM PIPE_DATABASE.<SCHEMA>.case_summary
+        WHERE sl_created_at >= '2025-06-01'
+          AND sl_is_bot = FALSE
+          AND is_deleted = FALSE
+          AND sl_last_follow_up_time_ms > 0
+        GROUP BY 1 ORDER BY 1
+    """,
     "frt_monthly": """
         SELECT TO_VARCHAR(DATE_TRUNC('MONTH', sl_created_at), 'YYYY-MM') AS month,
             ROUND(AVG(sl_first_response_time_ms) / 3600000.0, 2) AS avg_frt_hours,
