@@ -339,10 +339,13 @@ if tab == 0:
         # Row 3 — Dashboard MAU + Agent count
         e9,e10,_,__ = st.columns(4)
         try:
-            from utils.pendo_conn import get_page_views
-            _pid2 = customer.get("pendo_id", customer_name.lower())
-            _dp90 = get_page_views(_pid2, 90)
-            _dmau = _dp90["visitorId"].nunique() if not _dp90.empty and "visitorId" in _dp90.columns else 0
+            from utils.pendo_conn import get_page_views, get_combined_visitor_count
+            _pids2 = customer.get("pendo_ids", [customer.get("pendo_id", customer_name.lower())])
+            if len(_pids2) > 1:
+                _dmau = get_combined_visitor_count(_pids2, 90)
+            else:
+                _dp90 = get_page_views(_pids2[0], 90)
+                _dmau = _dp90["visitorId"].nunique() if not _dp90.empty and "visitorId" in _dp90.columns else 0
             e9.metric("Active UI users (90d)", f"{_dmau:,}",
                       "Unique users who opened SL UI · last 90d", delta_color="off")
         except Exception:
