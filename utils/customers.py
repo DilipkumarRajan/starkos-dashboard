@@ -216,7 +216,7 @@ CUSTOMERS = {
 
     "Coupa": {
         "schema":    "COUPA_PUBLIC",
-        "pendo_id":  "coupa",
+        "pendo_id":  "Coupa",
         "go_live":   None,
         "csm":       "",
         "sa":        "",
