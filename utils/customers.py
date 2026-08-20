@@ -9,6 +9,7 @@ CUSTOMERS = {
     "AVEVA": {
         "schema":    "AVEVA_PUBLIC",
         "pendo_id":  "aveva",
+        "pendo_ids": ['aveva', 'Aveva', 'AVEVA'],
         "go_live":   "2024-03-15",
         "csm":       "Dilip Kumar Rajan",
         "sa":        "Matt Lee",
@@ -22,6 +23,7 @@ CUSTOMERS = {
     "Hyland": {
         "schema":    "HYLAND_PUBLIC",
         "pendo_id":  "hyland",
+        "pendo_ids": ['hyland', 'Hyland'],
         "go_live":   "2025-06-29",
         "csm":       "Dilip Kumar Rajan",
         "sa":        "Yuvraj",
@@ -42,6 +44,7 @@ CUSTOMERS = {
         "schema":    "NICE_PUBLIC",
         "xfind_schemas": ["NICE_PUBLIC"],
         "pendo_id":  "nice",
+        "pendo_ids": ['nice', 'Nice', 'NICE'],
         "go_live":   "2022-01-01",
         "csm":       "Manochitra Janakaraj",
         "sa":        "Tali Bartal",
@@ -60,6 +63,7 @@ CUSTOMERS = {
     "Saviynt": {
         "schema":    "SAVIYNT_PUBLIC",
         "pendo_id":  "saviynt",
+        "pendo_ids": ['saviynt', 'Saviynt'],
         "go_live":   "2026-05-19",
         "ica_live":  "2026-05-21",
         "csm":       "Melanie Daniels",
@@ -79,6 +83,7 @@ CUSTOMERS = {
     "BlueGrace": {
         "schema":    "BLUEGRACE_PUBLIC",
         "pendo_id":  "bluegrace",
+        "pendo_ids": ['bluegrace', 'Bluegrace'],
         "go_live":   "2025-08-01",
         "csm":       "Dilip Kumar Rajan",
         "sa":        "Sam Wade",
@@ -115,6 +120,7 @@ CUSTOMERS = {
     "Alteryx": {
         "schema":    "ALTERYX_PUBLIC",
         "pendo_id":  "alteryx",
+        "pendo_ids": ['alteryx', 'Alteryx'],
         "go_live":   "2022-01-01",
         "csm":       "Melanie Daniels",
         "sa":        "Thomas Evans",
@@ -131,6 +137,7 @@ CUSTOMERS = {
     "Infoblox": {
         "schema":    "INFOBLOX_PUBLIC",
         "pendo_id":  "infoblox",
+        "pendo_ids": ['infoblox', 'Infoblox'],
         "go_live":   "2023-01-01",
         "csm":       "Manochitra Janakaraj",
         "sa":        "Thomas Evans",
@@ -148,6 +155,7 @@ CUSTOMERS = {
     "TraceLink": {
         "schema":    "TRACELINK_PUBLIC",
         "pendo_id":  "tracelink",
+        "pendo_ids": ['tracelink', 'Tracelink'],
         "go_live":   "2026-07-20",
         "csm":       "Manochitra Janakaraj",
         "sa":        "Thomas Evans",
@@ -164,6 +172,7 @@ CUSTOMERS = {
     "CyberArk": {
         "schema":    "CYBERARK_PUBLIC",
         "pendo_id":  "cyberark",
+        "pendo_ids": ['cyberark', 'Cyberark'],
         "go_live":   None,
         "csm":       "Melanie Daniels",
         "sa":        "Greg",
@@ -177,6 +186,7 @@ CUSTOMERS = {
     "Demo3": {
         "schema":    "DEMO3_PUBLIC",
         "pendo_id":  "demo3",
+        "pendo_ids": ['demo3', 'Demo3'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -191,6 +201,7 @@ CUSTOMERS = {
         "schema":    "CVENT_PUBLIC",
         "xfind_schemas": ["CVENTAGENT_PUBLIC", "CVENTPORTAL_PUBLIC"],
         "pendo_id":  "cvent",
+        "pendo_ids": ['cvent', 'Cvent'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -203,7 +214,8 @@ CUSTOMERS = {
 
     "NTT Data": {
         "schema":    "NTTLTD_EU_PUBLIC",
-        "pendo_id":  "nttltd",
+        "pendo_id":  "NTT DATA",
+        "pendo_ids": ['NTT DATA', 'NTTDATA'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -230,6 +242,7 @@ CUSTOMERS = {
     "Q2": {
         "schema":    "Q2_PUBLIC",
         "pendo_id":  "q2",
+        "pendo_ids": ['q2', 'Q2'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -243,6 +256,7 @@ CUSTOMERS = {
     "Proofpoint": {
         "schema":    "PROOFPOINT_PUBLIC",
         "pendo_id":  "proofpoint",
+        "pendo_ids": ['proofpoint', 'Proofpoint'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -256,6 +270,7 @@ CUSTOMERS = {
     "ESRI": {
         "schema":    "ESRI_PUBLIC",
         "pendo_id":  "esri",
+        "pendo_ids": ['esri', 'Esri'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -269,6 +284,7 @@ CUSTOMERS = {
     "Litera": {
         "schema":    "LITERA_PUBLIC",
         "pendo_id":  "litera",
+        "pendo_ids": ['litera', 'Litera'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -281,7 +297,8 @@ CUSTOMERS = {
 
     "CrowdStrike": {
         "schema":    "CROWDSTRIKE_PUBLIC",
-        "pendo_id":  "CrowdStrike",
+        "pendo_id":  "crowdstrike",
+        "pendo_ids": ['crowdstrike', 'Crowdstrike', 'CrowdStrike'],
         "go_live":   "2024-01-01",
         "csm":       "",
         "sa":        "",
@@ -295,6 +312,7 @@ CUSTOMERS = {
     "Automation Anywhere": {
         "schema":    "AUTOMATIONANYWHERE_PUBLIC",
         "pendo_id":  "automationanywhere",
+        "pendo_ids": ['automationanywhere', 'Automation Anywhere'],
         "go_live":   "2022-06-24",
         "csm":       "Kathleen Garcia",
         "sa":        "",
@@ -308,7 +326,7 @@ CUSTOMERS = {
     "Qlik": {
         "schema":    "QLIK2_PUBLIC",
         "pendo_id":  "qlik",
-        "pendo_ids": ["qlik", "Qlik"],
+        "pendo_ids": ['qlik', 'Qlik'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -322,6 +340,7 @@ CUSTOMERS = {
     "Rubrik": {
         "schema":    "RUBRIK_PUBLIC",
         "pendo_id":  "rubrik",
+        "pendo_ids": ['rubrik', 'Rubrik'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -361,6 +380,7 @@ CUSTOMERS = {
     "Braze": {
         "schema":    "BRAZE_PUBLIC",
         "pendo_id":  "braze",
+        "pendo_ids": ['braze', 'Braze'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -374,6 +394,7 @@ CUSTOMERS = {
     "Phenom People": {
         "schema":    "PHENOM_PUBLIC",
         "pendo_id":  "phenom",
+        "pendo_ids": ['phenom', 'phenom-sn'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -386,7 +407,8 @@ CUSTOMERS = {
 
     "Grafana Labs": {
         "schema":    "GRAFANALABS_PUBLIC",
-        "pendo_id":  "Grafana",
+        "pendo_id":  "grafanalabs",
+        "pendo_ids": ['grafanalabs', 'Grafana Labs'],
         "go_live":   None,
         "csm":       "",
         "sa":        "",
@@ -400,6 +422,7 @@ CUSTOMERS = {
     "ABBYY": {
         "schema":    "ABBYY_PUBLIC",
         "pendo_id":  "abbyy",
+        "pendo_ids": ['abbyy', 'Abbyy'],
         "go_live":   "2022-01-01",
         "csm":       "",
         "sa":        "",
@@ -426,6 +449,7 @@ CUSTOMERS = {
     "Deep Instinct": {
         "schema":    "DEEPINSTINCT_PUBLIC",
         "pendo_id":  "deepinstinct",
+        "pendo_ids": ['deepinstinct', 'Deep Instinct'],
         "go_live":   "2023-01-01",
         "csm":       "",
         "sa":        "",
@@ -439,6 +463,7 @@ CUSTOMERS = {
     "Freshworks": {
         "schema":    "FRESHWORKS_PUBLIC",
         "pendo_id":  "freshworks",
+        "pendo_ids": ['freshworks', 'Freshworks'],
         "go_live":   "2021-01-01",
         "csm":       "",
         "sa":        "",
@@ -452,6 +477,7 @@ CUSTOMERS = {
     "Mews": {
         "schema":    "MEWS_PUBLIC",
         "pendo_id":  "mews",
+        "pendo_ids": ['mews', 'Mews'],
         "go_live":   "2022-01-01",
         "csm":       "",
         "sa":        "",
@@ -465,6 +491,7 @@ CUSTOMERS = {
     "BigPanda": {
         "schema":    "BIGPANDA_DEVREV1_PUBLIC",
         "pendo_id":  "bigpanda",
+        "pendo_ids": ['bigpanda', 'Bigpanda', 'BigPanda'],
         "go_live":   "2025-01-01",
         "csm":       "",
         "sa":        "",

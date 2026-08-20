@@ -1053,12 +1053,14 @@ elif tab == 6:
                 try:
                     from utils.pendo_conn import (get_page_views, get_feature_events,
                         get_page_map, get_feature_map, get_visitor_count,
+                        get_combined_page_views, get_combined_visitor_count,
                         dau, top_modules, top_features)
                     import pandas as _pd
-                    pendo_id = customer.get("pendo_id", customer_name.lower())
+                    pendo_id  = customer.get("pendo_id", customer_name.lower())
+                    pendo_ids = customer.get("pendo_ids", [pendo_id])
                     _pm = get_page_map(); _fm = get_feature_map()
-                    _dp = get_page_views(pendo_id, 30)
-                    _df = get_feature_events(pendo_id, 30)
+                    _dp = get_combined_page_views(pendo_ids, 30) if len(pendo_ids)>1 else get_page_views(pendo_id, 30)
+                    _df = get_combined_page_views(pendo_ids, 30) if len(pendo_ids)>1 else get_feature_events(pendo_id, 30)
                     _dau_df = dau(_dp)
                     _pu = _dp.groupby("visitorId")["numMinutes"].sum().reset_index() if not _dp.empty else _pd.DataFrame()
                     _tot = len(_pu)
@@ -1067,7 +1069,7 @@ elif tab == 6:
                     _lo = len(_pu[_pu["numMinutes"]<60]) if not _pu.empty else 0
                     _p  = lambda n: round(n/_tot*100) if _tot else 0
                     pendo_data = {
-                        "visitors":     get_visitor_count(pendo_id),
+                        "visitors":     get_combined_visitor_count(pendo_ids, 90) if len(pendo_ids)>1 else get_visitor_count(pendo_id),
                         "avg_dau":      round(float(_dau_df["dau"].mean())) if not _dau_df.empty else 0,
                         "days":         30,
                         "tiers":        {"active":_a,"moderate":_mo,"low":_lo,
