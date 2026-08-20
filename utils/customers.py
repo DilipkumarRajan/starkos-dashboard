@@ -462,4 +462,43 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "BigPanda": {
+        "schema":    "BIGPANDA_DEVREV1_PUBLIC",
+        "pendo_id":  "bigpanda",
+        "go_live":   "2025-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "14K cases. Data from Jan 2025. DB: bigpanda-devrev1.",
+        "gcp_hostname": "bigpanda",
+        "benchmark_escalation_pct": 2.0,
+    },
+
+    "Databricks": {
+        "schema":    "DATABRICKS_PUBLIC",
+        "pendo_id":  "Databricks",
+        "go_live":   "2022-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "242K cases. Data from Jan 2014 (historical import).",
+        "gcp_hostname": "databricks",
+        "benchmark_escalation_pct": 2.0,
+    },
+
+    "Restaurant365": {
+        "schema":    "RESTAURANT365_PUBLIC",
+        "pendo_id":  "Restaurant365",
+        "go_live":   "2022-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "1M cases. Data from Jan 2022.",
+        "gcp_hostname": "restaurant365",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }
