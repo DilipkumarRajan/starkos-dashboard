@@ -600,8 +600,8 @@ CUSTOMERS = {
 
     "SPS Commerce": {
         "schema":    "SPSCOMMERCE_PUBLIC",
-        "pendo_id":  "spscommerce",
-        "pendo_ids": ["spscommerce", "SpsCommerce", "SPS Commerce"],
+        "pendo_id":  "Spscommerce",
+        "pendo_ids": ["Spscommerce"],
         "go_live":   "2022-01-01",
         "csm":       "",
         "sa":        "",
