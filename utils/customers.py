@@ -654,4 +654,18 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "SL4SL": {
+        "schema":    "SL4SL_FD_PUBLIC",
+        "pendo_id":  "sl4sl-fd",
+        "pendo_ids": ["sl4sl-fd", "SupportLogic"],
+        "go_live":   "2022-01-27",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "SupportLogic using SupportLogic (internal). 9.5K cases. Schema: SL4SL_FD_PUBLIC.",
+        "gcp_hostname": "sl4sl",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }
