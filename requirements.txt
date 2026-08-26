@@ -9,4 +9,5 @@ google-auth-httplib2
 google-api-python-client
 openpyxl
 requests
-streamlit-oauth
+pyOpenSSL==23.3.0
+cryptography==41.0.7
