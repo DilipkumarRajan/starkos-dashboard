@@ -487,6 +487,84 @@ if tab == 0:
             pass  # Silently skip if Pendo data unavailable
 
     st.divider()
+    # ── Post-renewal case volume ──────────────────────────────────────────────
+    try:
+        from utils.freshdesk_conn import get_renewal_date, is_available as fd_available
+        if fd_available():
+            fd_data = get_renewal_date(customer_name)
+            if not fd_data.get("error") and fd_data.get("renewal_date"):
+                import datetime as _rdt
+                renewal_dt = fd_data["renewal_date"]
+                renewal_str = fd_data["renewal_str"]
+                today = _rdt.datetime.now()
+                days_to_renewal = (renewal_dt - today).days
+
+                # Case volume at renewal and YoY since renewal
+                renewal_year_start = renewal_dt.replace(month=1, day=1)
+
+                df_renewal_vol = run_query(f"""
+                    SELECT
+                        YEAR(sl_created_at) AS yr,
+                        COUNT(*) AS case_count
+                    FROM PIPE_DATABASE.<SCHEMA>.case_summary
+                    WHERE sl_created_at >= DATEADD(YEAR,-3, '{renewal_dt.strftime("%Y-%m-%d")}')
+                      AND sl_is_bot = FALSE
+                      AND is_deleted = FALSE
+                    GROUP BY 1
+                    ORDER BY 1
+                """, schema)
+
+                if not df_renewal_vol.empty:
+                    st.divider()
+                    st.markdown(f"""
+<div style='background:#0d1117;border:0.5px solid #21262d;border-radius:12px;
+     padding:16px 20px;margin-bottom:8px'>
+  <div style='display:flex;align-items:center;gap:10px;margin-bottom:12px'>
+    <span style='font-size:24px'>📢</span>
+    <div>
+      <div style='font-size:14px;font-weight:700;color:#e6edf3'>
+        Post-Renewal Outcomes
+      </div>
+      <div style='font-size:11px;color:#8b949e'>
+        Renewal: {renewal_str} · 
+        {'🔴 Attention needed' if days_to_renewal < -14 and fd_data.get('lifecycle_stage') in ['Contract Lapsed','Churned'] 
+         else '✅ Renewed ' + str(abs(days_to_renewal)) + 'd ago' if days_to_renewal < 0 
+         else '🟡 Renewing in ' + str(days_to_renewal) + 'd' if days_to_renewal <= 90 
+         else '🟢 Active · renews ' + str(days_to_renewal) + 'd away'} · 
+        Source: Freshdesk · Case data: Snowflake
+      </div>
+    </div>
+  </div>""", unsafe_allow_html=True)
+
+                    # YoY case volume since renewal
+                    yoy_cols = st.columns(len(df_renewal_vol))
+                    prev_count = None
+                    for i, (_, row) in enumerate(df_renewal_vol.iterrows()):
+                        yr = int(row["yr"])
+                        cnt = int(row["case_count"])
+                        delta_str = ""
+                        delta_color = "off"
+                        if prev_count:
+                            delta_pct = round((cnt - prev_count) / prev_count * 100, 1)
+                            delta_str = f"{'+' if delta_pct >= 0 else ''}{delta_pct}% vs prior year"
+                            delta_color = "inverse" if delta_pct > 5 else "normal" if delta_pct < -5 else "off"
+                        yoy_cols[i].metric(
+                            f"Cases {yr}",
+                            f"{cnt:,}",
+                            delta_str if delta_str else "Baseline year",
+                            delta_color=delta_color
+                        )
+                        prev_count = cnt
+
+                    st.markdown("</div>", unsafe_allow_html=True)
+                    st.caption(
+                        f"YoY case volume since renewal · "
+                        f"Excludes bot cases and deleted cases · "
+                        f"Renewal date from Freshdesk (cached 7 days)"
+                    )
+    except Exception as _fd_err:
+        pass  # Silently skip if Freshdesk unavailable
+
     # ── Monthly volume chart ─────────────────────────────────────────────────
     if not df_vol_mo.empty:
         from utils.charts import stacked_bar, line_chart
