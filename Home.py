@@ -489,12 +489,9 @@ if tab == 0:
     st.divider()
     # ── Post-renewal case volume ──────────────────────────────────────────────
     try:
-        st.info("FD DEBUG: entering block")
         from utils.freshdesk_conn import get_renewal_date, is_available as fd_available
-        st.info(f"FD DEBUG: fd_available={fd_available()}")
         if fd_available():
             fd_data = get_renewal_date(customer_name)
-            st.info(f"FD DEBUG: fd_data error={fd_data.get('error')} renewal={fd_data.get('renewal_date')}")
             if not fd_data.get("error") and fd_data.get("renewal_date"):
                 import datetime as _rdt
                 renewal_dt = fd_data["renewal_date"]
@@ -566,7 +563,7 @@ if tab == 0:
                         f"Renewal date from Freshdesk (cached 7 days)"
                     )
     except Exception as _fd_err:
-        st.error(f"Freshdesk debug: {_fd_err}", icon="🔍")
+        pass  # Silently skip if Freshdesk unavailable
 
     # ── Monthly volume chart ─────────────────────────────────────────────────
     if not df_vol_mo.empty:
