@@ -156,3 +156,4 @@ For production use, consider switching to `BI_REPORT_WH` (requires RESUME privil
 
 Heavy queries (follow-up response time, ICA assignment split) may take 30–60s on a cold warehouse. These are marked `"status": "slow"` in the catalog and shown with a warning in the Query Explorer.
 # Tue Aug 18 16:03:25 IST 2026
+# force redeploy Wed Aug 26 18:38:42 IST 2026
