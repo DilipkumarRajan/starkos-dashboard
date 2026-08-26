@@ -563,7 +563,7 @@ if tab == 0:
                         f"Renewal date from Freshdesk (cached 7 days)"
                     )
     except Exception as _fd_err:
-        pass  # Silently skip if Freshdesk unavailable
+        st.error(f"Freshdesk debug: {_fd_err}", icon="🔍")
 
     # ── Monthly volume chart ─────────────────────────────────────────────────
     if not df_vol_mo.empty:
