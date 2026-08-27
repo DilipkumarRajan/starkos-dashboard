@@ -668,4 +668,18 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "Perforce": {
+        "schema":    "PERFORCE_PUBLIC",
+        "pendo_id":  "perforce",
+        "pendo_ids": ["perforce", "Perforce"],
+        "go_live":   "2022-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "380K cases. Data from May 2014 (historical import). Freshdesk: Perforce Software Inc. No renewal date in Freshdesk.",
+        "gcp_hostname": "perforce",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }
