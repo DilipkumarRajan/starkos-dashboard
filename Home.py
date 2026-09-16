@@ -105,9 +105,12 @@ TABS = [
 st.markdown("""
 <div style='background:#0A1931;border-radius:10px;padding:10px 20px;margin-bottom:8px;
      display:flex;align-items:center;gap:12px;border:0.5px solid #1e2d4a'>
-  <div style='font-size:24px;font-weight:800;letter-spacing:1px;
-       font-family:Google Sans,Arial,sans-serif;line-height:1'>
-    <span style='color:#FF4444'>S</span><span style='color:#FFD700'>T</span><span style='color:#00D4A0'>A</span><span style='color:#4D9FFF'>R</span><span style='color:#9B6FFF'>K</span><span style='color:#FFD700'>os</span>
+  <div style='font-size:28px;font-weight:900;letter-spacing:3px;
+       font-family:Google Sans,Arial,sans-serif;line-height:1;
+       background:linear-gradient(135deg,#FFD700,#FFA500,#FFD700);
+       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+       filter:drop-shadow(0 0 8px rgba(255,215,0,0.6))'>
+    STARKos</span>
   </div>
   <div style='width:1px;height:22px;background:#30363d'></div>
   <div style='font-size:11px;color:#8b949e;font-style:italic;letter-spacing:0.04em'>
