@@ -124,7 +124,7 @@ nav_cols = st.columns([1.2] + [0.7] * len(TABS) + [0.1])
 
 with nav_cols[0]:
     selected_customer = st.selectbox(
-        "", list(CUSTOMERS.keys()),
+        "Select account", list(CUSTOMERS.keys()),
         index=list(CUSTOMERS.keys()).index(st.session_state.selected_customer),
         key="customer_select",
         label_visibility="collapsed",
@@ -139,7 +139,7 @@ for i, (icon, label) in enumerate(TABS):
         is_active = st.session_state.active_tab == i
         btn_style = "primary" if is_active else "secondary"
         if st.button(f"{icon} {label}", key=f"tab_{i}", type=btn_style,
-                     use_container_width=True):
+                     width='stretch'):
             st.session_state.active_tab = i
             st.rerun()
 
@@ -431,7 +431,7 @@ if tab == 0:
                                    ticksuffix="h"),
                         showlegend=False,
                     )
-                    st.plotly_chart(fig1, use_container_width=True)
+                    st.plotly_chart(fig1, width='stretch')
 
                 with tr2:
                     fig2 = go.Figure()
@@ -459,7 +459,7 @@ if tab == 0:
                                    gridcolor="rgba(255,255,255,0.05)"),
                         showlegend=False,
                     )
-                    st.plotly_chart(fig2, use_container_width=True)
+                    st.plotly_chart(fig2, width='stretch')
 
                 # Weekly active users trend
                 fig3 = go.Figure()
@@ -484,7 +484,7 @@ if tab == 0:
                                gridcolor="rgba(255,255,255,0.05)"),
                     showlegend=False,
                 )
-                st.plotly_chart(fig3, use_container_width=True)
+                st.plotly_chart(fig3, width='stretch')
 
         except Exception as _pendo_err:
             pass  # Silently skip if Pendo data unavailable
@@ -579,25 +579,25 @@ if tab == 0:
                     {"col":"p1_cases","name":"P1 Critical","color":COLORS["red"]},
                     {"col":"p2_cases","name":"P2 High",    "color":COLORS["amber"]},
                     {"col":"total_cases","name":"Total",   "color":COLORS["blue_light"]},
-                ], height=220), use_container_width=True)
+                ], height=220), width='stretch')
         with col_frt2:
             if not df_frt.empty:
                 st.markdown("**First response time — monthly (hrs)**")
                 st.plotly_chart(area_chart(df_frt, x="month",
                     y_cols=[{"col":"avg_frt_hours","name":"FRT (hrs)",
                              "color":COLORS["blue"],"fill":"rgba(24,95,165,0.1)"}],
-                    height=220), use_container_width=True)
+                    height=220), width='stretch')
         st.divider()
 
     col_g1,col_g2,col_g3,col_area = st.columns([1,1,1,3])
     if not df_health.empty:
         with col_g1:
             st.markdown("**Health score**")
-            st.plotly_chart(gauge_chart(safe_float(df_health,"avg_health_score",idx=-1),label="/ 100"),use_container_width=True)
+            st.plotly_chart(gauge_chart(safe_float(df_health,"avg_health_score",idx=-1),label="/ 100"),width='stretch')
     if not df_sent.empty:
         with col_g2:
             st.markdown("**Sentiment**")
-            st.plotly_chart(gauge_chart(safe_float(df_sent,"avg_sentiment",idx=-1),label="/ 100"),use_container_width=True)
+            st.plotly_chart(gauge_chart(safe_float(df_sent,"avg_sentiment",idx=-1),label="/ 100"),width='stretch')
     if not df_esc.empty:
         le=safe_float(df_esc,"escalation_pct",idx=-2)
         with col_g3:
@@ -605,7 +605,7 @@ if tab == 0:
             st.plotly_chart(gauge_chart(le,min_val=0,max_val=5,
                 thresholds=[{"range":[0,1],"color":COLORS["teal_light"]},
                             {"range":[1,2],"color":COLORS["amber_light"]},
-                            {"range":[2,5],"color":COLORS["red_light"]}],label="%"),use_container_width=True)
+                            {"range":[2,5],"color":COLORS["red_light"]}],label="%"),width='stretch')
     if not df_fur.empty:
         with col_area:
             st.markdown("**Follow-up response time — monthly (hrs)**")
@@ -614,13 +614,13 @@ if tab == 0:
                     {"col":"avg_followup_hours","name":"Avg follow-up (hrs)","color":COLORS["teal"],"fill":"rgba(15,110,86,0.1)"},
                     {"col":"avg_max_followup_hours","name":"Max follow-up (hrs)","color":COLORS["amber"],"fill":"rgba(186,117,23,0.08)"},
                 ],
-                height=200),use_container_width=True)
+                height=200),width='stretch')
     elif not df_frt.empty:
         with col_area:
             st.markdown("**First response time — monthly (hrs)**")
             st.plotly_chart(area_chart(df_frt,x="month",
                 y_cols=[{"col":"avg_frt_hours","name":"FRT (hrs)","color":COLORS["blue"],"fill":"rgba(24,95,165,0.1)"}],
-                height=200),use_container_width=True)
+                height=200),width='stretch')
 
     st.divider()
     col_d,col_c = st.columns([1,2])
@@ -631,7 +631,7 @@ if tab == 0:
             st.plotly_chart(donut_chart(
                 labels=["Auto (ICA)","Manual"],values=[auto_cases,manual_cases],
                 colors=[COLORS["teal"],COLORS["gray"]],height=240,
-                center_text=f"{round(auto_cases/total*100) if total else 0}% auto"),use_container_width=True)
+                center_text=f"{round(auto_cases/total*100) if total else 0}% auto"),width='stretch')
     else:
         with col_d:
             st.markdown("**ICA — Routing Agent**")
@@ -643,7 +643,7 @@ if tab == 0:
                 bar_col={"col":"total_cases","name":"Cases","color":COLORS["gray_light"]},
                 line_col={"col":"escalation_pct","name":"Esc %","color":COLORS["red"]},
                 reference_lines=[{"y":2.0,"label":"2% benchmark","color":COLORS["red"]}],
-                height=240),use_container_width=True)
+                height=240),width='stretch')
 
     col_h,col_s = st.columns(2)
     if not df_health.empty:
@@ -651,7 +651,7 @@ if tab == 0:
             st.markdown("**Account health score trend**")
             st.plotly_chart(area_chart(df_health,x="month",
                 y_cols=[{"col":"avg_health_score","name":"Health score","color":COLORS["purple"],"fill":"rgba(83,74,183,0.1)"}],
-                reference_lines=[{"y":80,"label":"Score 80","color":COLORS["gray"]}],height=220),use_container_width=True)
+                reference_lines=[{"y":80,"label":"Score 80","color":COLORS["gray"]}],height=220),width='stretch')
     if not df_sent.empty:
         with col_s:
             st.markdown("**Sentiment vs need-attention**")
@@ -659,7 +659,7 @@ if tab == 0:
                 y_cols=[
                     {"col":"avg_sentiment","name":"Sentiment","color":COLORS["teal"],"fill":"rgba(15,110,86,0.1)"},
                     {"col":"avg_need_attention","name":"Need attention","color":COLORS["amber"],"fill":"rgba(186,117,23,0.08)"},
-                ],height=220),use_container_width=True)
+                ],height=220),width='stretch')
 
     st.divider()
     st.subheader("📣 Recent account activity")
@@ -754,7 +754,7 @@ elif tab == 1:
         col_btn, col_info = st.columns([1, 3])
         with col_btn:
             generate = st.button("🧠 Generate brief", type="primary",
-                                 use_container_width=True)
+                                 width='stretch')
         with col_info:
             if brief_key in st.session_state:
                 b = st.session_state[brief_key]
@@ -880,14 +880,14 @@ elif tab == 2:
             st.plotly_chart(combo_chart(df_lte,x="month",
                 bar_col={"col":"cases_predicted","name":"Predicted (LTE)","color":COLORS["amber_light"]},
                 line_col={"col":"actually_escalated","name":"Actually escalated","color":COLORS["red"]},
-                height=260),use_container_width=True)
+                height=260),width='stretch')
     if not df_esc.empty:
         with col_r:
             st.markdown("**Escalation rate vs benchmark**")
             st.plotly_chart(line_chart(df_esc,x="month",
                 y_cols=[{"col":"escalation_pct","name":"Esc %","color":COLORS["red"]}],
                 reference_lines=[{"y":benchmark,"label":f"{benchmark}% benchmark","color":COLORS["red"]}],
-                height=260),use_container_width=True)
+                height=260),width='stretch')
 
     col_l2,col_r2 = st.columns(2)
     if not df_lte.empty:
@@ -895,14 +895,14 @@ elif tab == 2:
             st.markdown("**LTE hit rate % — monthly**")
             st.plotly_chart(line_chart(df_lte,x="month",
                 y_cols=[{"col":"hit_rate_pct","name":"Hit rate %","color":COLORS["purple"]}],
-                height=240),use_container_width=True)
+                height=240),width='stretch')
     if not df_rev.empty:
         with col_r2:
             pivot=df_rev.pivot_table(index="month",columns="status",values="cnt",aggfunc="sum",fill_value=0).reset_index()
             sc={"COMPLETED":COLORS["teal"],"PENDING":COLORS["amber"],"SNOOZED":COLORS["blue"],"REJECTED":COLORS["red"]}
             y_cols=[{"col":s,"name":s.capitalize(),"color":sc.get(s,COLORS["gray"])} for s in [c for c in pivot.columns if c!="month"]]
             st.markdown("**Escalation review swarming — monthly**")
-            st.plotly_chart(stacked_bar(pivot,x="month",y_cols=y_cols,height=240),use_container_width=True)
+            st.plotly_chart(stacked_bar(pivot,x="month",y_cols=y_cols,height=240),width='stretch')
 
 # ════════════════════════════════════════════════════════════════════════════
 # TAB 2 — SENTIMENT
@@ -934,7 +934,7 @@ elif tab == 3:
                 y_cols=[
                     {"col":"avg_sentiment","name":"Sentiment","color":COLORS["teal"],"fill":"rgba(15,110,86,0.12)"},
                     {"col":"avg_need_attention","name":"Need-attention","color":COLORS["amber"],"fill":"rgba(186,117,23,0.08)"},
-                ],height=280),use_container_width=True)
+                ],height=280),width='stretch')
     if not df_alerts.empty:
         with col_r:
             st.markdown("**Alerts consumption — monthly**")
@@ -942,7 +942,7 @@ elif tab == 3:
                 y_cols=[
                     {"col":"alert_cases","name":"Alert cases","color":COLORS["teal"]},
                     {"col":"total_alerts","name":"Total alerts","color":COLORS["teal_light"]},
-                ],height=280),use_container_width=True)
+                ],height=280),width='stretch')
 
 # ════════════════════════════════════════════════════════════════════════════
 # TAB 3 — ROUTING
@@ -983,7 +983,7 @@ elif tab == 4:
         st.markdown("**ICA auto vs manual assignments — monthly**")
         st.plotly_chart(stacked_bar(df_ica_mo,x="month",
             y_cols=[{"col":"auto_cases","name":"Auto (ICA)","color":COLORS["teal"]},
-                    {"col":"manual_cases","name":"Manual","color":COLORS["gray"]}],height=220),use_container_width=True)
+                    {"col":"manual_cases","name":"Manual","color":COLORS["gray"]}],height=220),width='stretch')
         st.divider()
     else:
         st.info("**ICA Routing Agent** — not deployed for this customer.",icon="ℹ️")
@@ -995,7 +995,7 @@ elif tab == 4:
             st.markdown("**Reassignment rate — monthly**")
             st.plotly_chart(bar_chart(df_re,x="month",
                 y_cols=[{"col":"reassignment_pct","name":"Reassignment %","color":clrs,"colors":clrs}],
-                height=260),use_container_width=True)
+                height=260),width='stretch')
     if not df_fp.empty:
         pivot=df_fp.pivot_table(index="month",columns="priority_tier",values="avg_frt_hours",aggfunc="mean").reset_index()
         cols=[c for c in ["P1 Critical","P2 High","P3 Medium","P4/Other"] if c in pivot.columns]
@@ -1004,7 +1004,7 @@ elif tab == 4:
             st.markdown("**FRT by priority tier (hrs)**")
             st.plotly_chart(line_chart(pivot,x="month",
                 y_cols=[{"col":c,"name":c,"color":cm.get(c,COLORS["gray"])} for c in cols],
-                height=260),use_container_width=True)
+                height=260),width='stretch')
 
     col_l2,col_r2 = st.columns(2)
     if not df_cpa.empty:
@@ -1016,13 +1016,13 @@ elif tab == 4:
             st.markdown("**Cases per agent — weekly**")
             st.plotly_chart(bar_chart(df_plot,x="week_label",
                 y_cols=[{"col":"cases_per_agent","name":"Cases/agent","color":COLORS["purple"]}],
-                height=240),use_container_width=True)
+                height=240),width='stretch')
     if not df_frt.empty:
         with col_r2:
             st.markdown("**Overall FRT — monthly**")
             st.plotly_chart(line_chart(df_frt,x="month",
                 y_cols=[{"col":"avg_frt_hours","name":"FRT (hrs)","color":COLORS["blue"]}],
-                height=240),use_container_width=True)
+                height=240),width='stretch')
 
 # ════════════════════════════════════════════════════════════════════════════
 # TAB 4 — FEATURE USAGE
@@ -1081,14 +1081,14 @@ elif tab == 5:
             st.markdown("**Agent actions on SL signals (lifetime)**")
             st.plotly_chart(bar_chart(df_act_sum,x="action_type",
                 y_cols=[{"col":"total_actions","name":"Actions","color":clrs,"colors":clrs}],
-                height=260,horizontal=True),use_container_width=True)
+                height=260,horizontal=True),width='stretch')
         if not df_act_mo.empty:
             with col_r:
                 pivot=df_act_mo.pivot_table(index="month",columns="action_type",values="cnt",aggfunc="sum",fill_value=0).reset_index()
                 act_cols=[c for c in pivot.columns if c!="month"]
                 y_cols=[{"col":c,"name":c.replace("_"," ").title(),"color":palette[i%len(palette)]} for i,c in enumerate(act_cols)]
                 st.markdown("**Actions by type — monthly**")
-                st.plotly_chart(stacked_bar(pivot,x="month",y_cols=y_cols,height=260),use_container_width=True)
+                st.plotly_chart(stacked_bar(pivot,x="month",y_cols=y_cols,height=260),width='stretch')
 
     df_st=data["ai_summaries_total"]; df_sm=data["ai_summaries_monthly"]
     if not df_st.empty and int(df_st["total"].sum())>0:
@@ -1099,7 +1099,7 @@ elif tab == 5:
             st.plotly_chart(donut_chart(
                 labels=df_st["summary_type"].tolist(),values=df_st["total"].tolist(),
                 colors=[COLORS["blue"],COLORS["teal"],COLORS["purple"],COLORS["amber"]],
-                height=260,center_text=f"{int(df_st['total'].sum()):,} total"),use_container_width=True)
+                height=260,center_text=f"{int(df_st['total'].sum()):,} total"),width='stretch')
         if not df_sm.empty:
             with col_r2:
                 p2=df_sm.groupby(["month","summary_type"])["summaries_generated"].sum().reset_index()
@@ -1109,7 +1109,7 @@ elif tab == 5:
                 st.markdown("**AI summaries — monthly trend**")
                 st.plotly_chart(stacked_bar(p2,x="month",
                     y_cols=[{"col":c,"name":c.replace("_"," ").title(),"color":cmap[i%len(cmap)]} for i,c in enumerate(sc)],
-                    height=260),use_container_width=True)
+                    height=260),width='stretch')
 
 # ════════════════════════════════════════════════════════════════════════════
 # TAB 5 — ROI SUMMARY
@@ -1184,7 +1184,7 @@ elif tab == 6:
 
     st.subheader("What has improved since go-live")
     if rows:
-        st.dataframe(pd.DataFrame(rows),use_container_width=True,hide_index=True)
+        st.dataframe(pd.DataFrame(rows),width='stretch',hide_index=True)
 
     st.divider()
     st.subheader("Visual highlights")
@@ -1194,18 +1194,18 @@ elif tab == 6:
             st.markdown("**FRT journey since go-live**")
             st.plotly_chart(area_chart(df_frt,x="month",
                 y_cols=[{"col":"avg_frt_hours","name":"FRT (hrs)","color":COLORS["blue"],"fill":"rgba(24,95,165,0.1)"}],
-                height=200),use_container_width=True)
+                height=200),width='stretch')
     if ica_active(df_ica_tot):
         total=auto_cases+manual_cases
         with col2:
             st.markdown("**ICA auto vs manual (lifetime)**")
             st.plotly_chart(donut_chart(["Auto","Manual"],[auto_cases,manual_cases],
                 [COLORS["teal"],COLORS["gray"]],height=200,
-                center_text=f"{round(auto_cases/total*100) if total else 0}% auto"),use_container_width=True)
+                center_text=f"{round(auto_cases/total*100) if total else 0}% auto"),width='stretch')
     if not df_health.empty:
         with col3:
             st.markdown("**Account health score**")
-            st.plotly_chart(gauge_chart(safe_float(df_health,"avg_health_score",idx=-1),label="/ 100",height=200),use_container_width=True)
+            st.plotly_chart(gauge_chart(safe_float(df_health,"avg_health_score",idx=-1),label="/ 100",height=200),width='stretch')
 
     st.divider()
     st.subheader("⚠️ Watch items for renewal conversation")
@@ -1231,7 +1231,7 @@ elif tab == 6:
     st.subheader("📥 Generate renewal deck")
     col_btn,col_info=st.columns([1,3])
     with col_btn:
-        generate=st.button("🎯 Generate renewal deck",type="primary",use_container_width=True)
+        generate=st.button("🎯 Generate renewal deck",type="primary",width='stretch')
     with col_info:
         st.caption("Takes 15–30s · Calls Claude API once for narrative · Downloads as .pptx")
 
@@ -1469,7 +1469,7 @@ elif tab == 7:
                 df_t, x="short_id",
                 y_cols=[{"col":"total_minutes","name":"Minutes","color":df_t["color"].tolist(),"colors":df_t["color"].tolist()}],
                 height=180,
-            ), use_container_width=True)
+            ), width='stretch')
 
     st.divider()
 
@@ -1616,14 +1616,14 @@ elif tab == 7:
                     y_cols=[{"col":"users","name":"Users",
                              "color":[clrs[i%len(clrs)] for i in range(len(df_cntry))],
                              "colors":[clrs[i%len(clrs)] for i in range(len(df_cntry))]}],
-                    height=280, horizontal=True), use_container_width=True)
+                    height=280, horizontal=True), width='stretch')
             with col_tbl:
                 df_cntry_display = df_cntry.copy()
                 df_cntry_display.columns = ["Country", "Users"]
                 df_cntry_display["% of total"] = (
                     df_cntry_display["Users"] / df_cntry_display["Users"].sum() * 100
                 ).round(1).astype(str) + "%"
-                st.dataframe(df_cntry_display, use_container_width=True,
+                st.dataframe(df_cntry_display, width='stretch',
                              hide_index=True)
 
     st.divider()
@@ -1634,13 +1634,13 @@ elif tab == 7:
             st.markdown("**Daily active users (DAU)**")
             st.plotly_chart(area_chart(df_dau, x="date",
                 y_cols=[{"col":"dau","name":"Active users","color":COLORS["blue"],"fill":"rgba(24,95,165,0.1)"}],
-                height=220), use_container_width=True)
+                height=220), width='stretch')
     if not df_time.empty:
         with col_r:
             st.markdown("**Time in platform — daily (minutes)**")
             st.plotly_chart(area_chart(df_time, x="date",
                 y_cols=[{"col":"total_minutes","name":"Minutes","color":COLORS["teal"],"fill":"rgba(15,110,86,0.1)"}],
-                height=220), use_container_width=True)
+                height=220), width='stretch')
 
     # ── Section 5: Top pages + features ──────────────────────────────────────
     col_l2, col_r2 = st.columns(2)
@@ -1650,7 +1650,7 @@ elif tab == 7:
             st.plotly_chart(bar_chart(
                 df_top_p.sort_values("total_views"), x="page_name",
                 y_cols=[{"col":"total_views","name":"Views","color":COLORS["blue"]}],
-                height=300, horizontal=True), use_container_width=True)
+                height=300, horizontal=True), width='stretch')
     if not df_top_f.empty:
         with col_r2:
             palette = [COLORS["teal"],COLORS["blue"],COLORS["purple"],COLORS["amber"],
@@ -1660,7 +1660,7 @@ elif tab == 7:
             st.plotly_chart(bar_chart(
                 df_top_f.sort_values("total_clicks"), x="feature_name",
                 y_cols=[{"col":"total_clicks","name":"Clicks","color":clrs,"colors":clrs}],
-                height=300, horizontal=True), use_container_width=True)
+                height=300, horizontal=True), width='stretch')
 
     st.caption(f"Pendo account: `{pendo_id}` · Alerts: PIPE_DATABASE.{schema}.ALERTS · "
                f"Pages: {len(page_map):,} · Features: {len(feature_map):,}")
@@ -1700,7 +1700,7 @@ elif tab == 8:
                         df=run_query(QUERIES[entry["id"]],schema)
                     if not df.empty:
                         st.success(f"✓ {len(df)} rows")
-                        st.dataframe(df,use_container_width=True)
+                        st.dataframe(df,width='stretch')
                         st.download_button("⬇ CSV",df.to_csv(index=False),
                             f"{customer_name}_{entry['id']}.csv","text/csv",key=f"dl_{entry['id']}")
                     else:
@@ -2070,7 +2070,7 @@ elif tab == 9:
             with st.expander("Show filter", expanded=False):
                 st.code(filter_preview(base), language="text")
         with col_btn:
-            st.link_button("Open in Log Explorer →", url, use_container_width=True)
+            st.link_button("Open in Log Explorer →", url, width='stretch')
 
     st.divider()
 
@@ -2153,7 +2153,7 @@ elif tab == 9:
                         unsafe_allow_html=True,
                     )
                 with col_b:
-                    st.link_button("Open →", url, use_container_width=True)
+                    st.link_button("Open →", url, width='stretch')
                 st.markdown("<div style='height:2px'></div>", unsafe_allow_html=True)
 
     st.divider()
@@ -2280,7 +2280,7 @@ elif tab == 10:
 
     col_refresh, col_info = st.columns([1, 4])
     with col_refresh:
-        if st.button("🔄 Refresh data", use_container_width=True):
+        if st.button("🔄 Refresh data", width='stretch'):
             st.cache_data.clear()
             st.rerun()
     with col_info:
@@ -2420,7 +2420,7 @@ elif tab == 10:
         })
 
     df_display = pd.DataFrame(rows_out)
-    st.dataframe(df_display, use_container_width=True, hide_index=True,
+    st.dataframe(df_display, width='stretch', hide_index=True,
                  height=min(60 + len(df_display)*35, 600))
 
     # Legend
@@ -2941,7 +2941,7 @@ elif tab == 10:
                         COLORS["red"],COLORS["gray"],COLORS["purple"]],
                 height=220,
                 center_text=f"{len(df_filtered)} accounts"
-            ), use_container_width=True)
+            ), width='stretch')
 
     # Module adoption
     module_live = {}
@@ -2965,7 +2965,7 @@ elif tab == 10:
                           "colors":[COLORS["teal"],COLORS["blue"],COLORS["purple"],
                                     COLORS["amber"],COLORS["green"],COLORS["red"]]}],
                 height=220
-            ), use_container_width=True)
+            ), width='stretch')
 
     # ARR by account (top 10)
     if arr_col and not df_filtered.empty:
@@ -2981,7 +2981,7 @@ elif tab == 10:
                 arr_df.sort_values("arr_k"), x="customer",
                 y_cols=[{"col":"arr_k","name":"ARR ($K)","color":COLORS["teal"]}],
                 height=220, horizontal=True
-            ), use_container_width=True)
+            ), width='stretch')
 
     st.caption(f"Source: data/accounts.xlsx · {len(df_filtered)} accounts shown · "
                f"TSE filter: {selected_tse} · CSM filter: {selected_csm}")
@@ -3066,7 +3066,7 @@ elif tab == 11:
   </div>
 </div>""", unsafe_allow_html=True)
     with col_refresh:
-        if st.button("🔄 Refresh", use_container_width=True):
+        if st.button("🔄 Refresh", width='stretch'):
             st.cache_data.clear()
             st.rerun()
 
