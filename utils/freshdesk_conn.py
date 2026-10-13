@@ -63,6 +63,8 @@ CUSTOMER_SEARCH_MAP = {
     "Certinia":           "Certinia",
     "SL4SL":              "SupportLogic",
     "Perforce":           "Perforce",
+    "Gigamon":            "Gigamon",
+    "Kyriba":             "Kyriba",
 }
 
 

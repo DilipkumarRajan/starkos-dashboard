@@ -682,4 +682,32 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "Gigamon": {
+        "schema":    "GIGAMON_PUBLIC",
+        "pendo_id":  "Gigamon",
+        "pendo_ids": ["Gigamon", "gigamon"],
+        "go_live":   "2025-01-01",
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "17K cases. Data from Jan 2025.",
+        "gcp_hostname": "gigamon",
+        "benchmark_escalation_pct": 2.0,
+    },
+
+    "Kyriba": {
+        "schema":    "KYRIBA_PUBLIC",
+        "pendo_id":  "Kyriba",
+        "pendo_ids": ["Kyriba", "kyriba"],
+        "go_live":   None,
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "Snowflake not yet synced — DevOps grant pending. Pendo and Freshdesk confirmed.",
+        "gcp_hostname": "kyriba",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }

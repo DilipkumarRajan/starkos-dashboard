@@ -123,9 +123,12 @@ st.markdown("""
 nav_cols = st.columns([1.2] + [0.7] * len(TABS) + [0.1])
 
 with nav_cols[0]:
+    _cust_keys = list(CUSTOMERS.keys())
+    _default = st.session_state.get("selected_customer", _cust_keys[0])
+    _default = _default if _default in _cust_keys else _cust_keys[0]
     selected_customer = st.selectbox(
-        "Select account", list(CUSTOMERS.keys()),
-        index=list(CUSTOMERS.keys()).index(st.session_state.selected_customer),
+        "Select account", _cust_keys,
+        index=_cust_keys.index(_default),
         key="customer_select",
         label_visibility="collapsed",
     )
