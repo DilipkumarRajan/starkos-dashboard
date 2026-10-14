@@ -1413,9 +1413,9 @@ elif tab == 7:
             risk_names = "<ul style='margin:8px 0 0;padding-left:16px;font-size:12px'>" + "".join(items) + "</ul>"
 
         if total_scored <= 1:
-        if total_scored <= 1:
-            risk_note = "<span style='font-size:11px;color:#888;margin-top:6px;display:block'>Note: ML health scoring may be running at case level — check ML_PREDICTION granularity.</span>"
-            risk_note = f"<div style='font-size:10px;color:#555;margin-top:6px'>Health score threshold: &lt;60/100 · {risk_pct}% of {total_scored:,} scored accounts</div>"
+            risk_note = "<span style='font-size:11px;color:#888;margin-top:6px;display:block'>Note: ML health scoring may be at case level — check ML_PREDICTION granularity.</span>"
+        else:
+            risk_note = f"<div style='font-size:10px;color:#555;margin-top:6px'>Health score based on {total_scored} accounts.</div>"
 
         st.markdown(f"""<div style='background:linear-gradient(135deg,#2A1010,#1A0A1A);
             border:0.5px solid #E24B4A;border-radius:10px;padding:16px 20px'>
