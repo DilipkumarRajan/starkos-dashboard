@@ -1345,7 +1345,8 @@ elif tab == 7:
 
     # ── KPI row ───────────────────────────────────────────────────────────────
     c1,c2,c3,c4,c5 = st.columns(5)
-    c1.metric(f"Unique visitors (last {days}d)", f"{visitors:,}")
+    _lifetime = get_visitor_count(pendo_ids[0])
+    c1.metric("Total visitors (lifetime)", f"{_lifetime:,}")
     c2.metric(f"Active users (last {days}d)", f"{active_users:,}")
     c3.metric("Avg daily active users", f"{avg_dau_val:,}")
     c4.metric("Total page views", f"{total_views:,}")
