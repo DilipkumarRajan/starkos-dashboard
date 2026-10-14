@@ -1345,13 +1345,13 @@ elif tab == 7:
 
     # ── KPI row ───────────────────────────────────────────────────────────────
     c1,c2,c3,c4,c5 = st.columns(5)
-    _lifetime = df_pages["visitorId"].nunique() if not df_pages.empty and "visitorId" in df_pages.columns else 0
-    c1.metric(f"Unique visitors (last {days}d)", f"{_lifetime:,}")
-    c1.metric("Total visitors (lifetime)", f"{_lifetime:,}")
-    c2.metric(f"Active users (last {days}d)", f"{active_users:,}")
-    c3.metric("Avg daily active users", f"{avg_dau_val:,}")
-    c4.metric("Total page views", f"{total_views:,}")
-    c5.metric("Feature clicks", f"{total_clicks:,}")
+    _avg_time = round(df_pages["numMinutes"].sum() / max(df_pages["visitorId"].nunique(),1) / 60, 1) if not df_pages.empty else 0
+    c1.metric(f"Active users (last {days}d)", f"{active_users:,}")
+
+    c2.metric("Avg daily active users", f"{avg_dau_val:,}")
+    c3.metric("Total page views", f"{total_views:,}")
+    c4.metric("Feature clicks", f"{total_clicks:,}")
+    c5.metric(f"Avg time/user (last {days}d)", f"{_avg_time:,} hrs")
 
 
     # ── SL value insight banner ───────────────────────────────────────────────
@@ -1413,8 +1413,8 @@ elif tab == 7:
             risk_names = "<ul style='margin:8px 0 0;padding-left:16px;font-size:12px'>" + "".join(items) + "</ul>"
 
         if total_scored <= 1:
-            risk_note = "<div style='font-size:11px;color:#555;margin-top:6px'>Note: ML health scoring may be running at the case level rather than sub-account level for this customer — check ML_PREDICTION data granularity.</div>"
-        else:
+        if total_scored <= 1:
+            risk_note = "<span style='font-size:11px;color:#888;margin-top:6px;display:block'>Note: ML health scoring may be running at case level — check ML_PREDICTION granularity.</span>"
             risk_note = f"<div style='font-size:10px;color:#555;margin-top:6px'>Health score threshold: &lt;60/100 · {risk_pct}% of {total_scored:,} scored accounts</div>"
 
         st.markdown(f"""<div style='background:linear-gradient(135deg,#2A1010,#1A0A1A);
