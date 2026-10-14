@@ -1345,7 +1345,8 @@ elif tab == 7:
 
     # ── KPI row ───────────────────────────────────────────────────────────────
     c1,c2,c3,c4,c5 = st.columns(5)
-    _lifetime = get_visitor_count(pendo_ids[0])
+    _lifetime = df_pages["visitorId"].nunique() if not df_pages.empty and "visitorId" in df_pages.columns else 0
+    c1.metric(f"Unique visitors (last {days}d)", f"{_lifetime:,}")
     c1.metric("Total visitors (lifetime)", f"{_lifetime:,}")
     c2.metric(f"Active users (last {days}d)", f"{active_users:,}")
     c3.metric("Avg daily active users", f"{avg_dau_val:,}")

@@ -69,7 +69,7 @@ def get_visitor_count(account_id: str) -> int:
     results = _post([
         {"source": {"visitors": {"account": {"id": account_id}}}},
         {"count": None},
-    ], "visitor-count")
+    ], f"visitor-count-{account_id}")
     return results[0].get("count", 0) if results else 0
 
 
