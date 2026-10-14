@@ -1317,7 +1317,6 @@ elif tab == 7:
         import pandas as _pd2
         page_map    = get_page_map()
         feature_map = get_feature_map()
-        visitors    = sum(get_visitor_count(p) for p in pendo_ids)
         _pf = [get_page_views(p, days) for p in pendo_ids]
         _ff = [get_feature_events(p, days) for p in pendo_ids]
         df_pages    = _pd2.concat([x for x in _pf if not x.empty], ignore_index=True).drop_duplicates() if any(not x.empty for x in _pf) else _pd2.DataFrame()
@@ -1346,7 +1345,7 @@ elif tab == 7:
 
     # ── KPI row ───────────────────────────────────────────────────────────────
     c1,c2,c3,c4,c5 = st.columns(5)
-    c1.metric("Total visitors (lifetime)", f"{visitors:,}")
+    c1.metric(f"Unique visitors (last {days}d)", f"{visitors:,}")
     c2.metric(f"Active users (last {days}d)", f"{active_users:,}")
     c3.metric("Avg daily active users", f"{avg_dau_val:,}")
     c4.metric("Total page views", f"{total_views:,}")
