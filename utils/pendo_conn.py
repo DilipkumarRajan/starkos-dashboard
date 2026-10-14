@@ -317,7 +317,10 @@ def get_combined_page_views(pendo_ids: list, days: int = 30) -> pd.DataFrame:
 
 
 def get_combined_visitor_count(pendo_ids: list, days: int = 90) -> int:
-    """Get unique visitor count across multiple Pendo account IDs."""
+    """Get unique visitor count across multiple Pendo account IDs.
+    Uses page_views to deduplicate visitors that appear in multiple IDs
+    (e.g. Gigamon + gigamon resolving to same account).
+    """
     all_visitors = set()
     for pid in pendo_ids:
         try:
