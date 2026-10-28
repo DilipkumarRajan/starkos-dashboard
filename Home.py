@@ -210,10 +210,10 @@ if tab == 0:
     if ica_active(df_ica):
         c5.metric("ICA auto-assignments", f"{auto_cases:,}", "Lifetime total")
     else:
-        _ica_in_license = "assign" in customer.get("license","").lower() or "ica" in customer.get("license","").lower()
-        _ica_label = "ICA — In testing" if _ica_in_license else "ICA"
-        _ica_sub   = "Manual assignments active · Auto QA pending" if _ica_in_license else "Not deployed"
-        c5.metric(_ica_label, "Configured", _ica_sub, delta_color="off")
+        if customer.get("ica_testing"):
+            c5.metric("ICA","In testing","Manual assignments active", delta_color="off")
+        else:
+            c5.metric("ICA","Not deployed","Manual assignment active", delta_color="off")
 
     # ── Case volume row ───────────────────────────────────────────────────────
     if not df_vol.empty:
@@ -295,10 +295,10 @@ if tab == 0:
         if ica_val > 0:
             e5.metric("ICA assignments (proj.)", _fmt(ica_val), "Last full month × 12", delta_color="off")
         else:
-            _ica_in_lic = "assign" in customer.get("license","").lower() or "ica" in customer.get("license","").lower()
-            e5.metric("ICA assignments", "In testing" if _ica_in_lic else "Not deployed",
-                      "Manual mode · Auto QA pending" if _ica_in_lic else "ICA not active",
-                      delta_color="off")
+            if customer.get("ica_testing"):
+                e5.metric("ICA assignments", "In testing", "Manual mode · Auto QA pending", delta_color="off")
+            else:
+                e5.metric("ICA assignments", "Not deployed", "ICA not active", delta_color="off")
 
         v,s = _proj(row.get("annual_auto_qa",0))
         e6.metric("Auto QA performed",
