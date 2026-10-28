@@ -22,7 +22,6 @@ CUSTOMERS = {
 
     "Hyland": {
         "schema":    "HYLAND_PUBLIC",
-        "ica_testing": True,  # ICA configured, manual testing phase
         "pendo_id":  "hyland",
         "pendo_ids": ['hyland', 'Hyland'],
         "go_live":   "2025-06-29",

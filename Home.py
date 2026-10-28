@@ -210,10 +210,7 @@ if tab == 0:
     if ica_active(df_ica):
         c5.metric("ICA auto-assignments", f"{auto_cases:,}", "Lifetime total")
     else:
-        if customer.get("ica_testing"):
-            c5.metric("ICA","In testing","Manual assignments active", delta_color="off")
-        else:
-            c5.metric("ICA","Not deployed","Manual assignment active", delta_color="off")
+        c5.metric("ICA","Not deployed","Manual assignment active", delta_color="off")
 
     # ── Case volume row ───────────────────────────────────────────────────────
     if not df_vol.empty:
@@ -295,10 +292,7 @@ if tab == 0:
         if ica_val > 0:
             e5.metric("ICA assignments (proj.)", _fmt(ica_val), "Last full month × 12", delta_color="off")
         else:
-            if customer.get("ica_testing"):
-                e5.metric("ICA assignments", "In testing", "Manual mode · Auto QA pending", delta_color="off")
-            else:
-                e5.metric("ICA assignments", "Not deployed", "ICA not active", delta_color="off")
+            e5.metric("ICA assignments", "Not deployed", "ICA not active", delta_color="off")
 
         v,s = _proj(row.get("annual_auto_qa",0))
         e6.metric("Auto QA performed",
