@@ -164,3 +164,47 @@ def run_query(sql: str, schema: str) -> pd.DataFrame:
     except Exception as e:
         st.error(f"**Query failed:** {e}", icon="❌")
         return pd.DataFrame()
+
+
+# -- Pending-schema guard ------------------------------------------------------
+# Schemas in WATCH_SCHEMAS return an empty DataFrame (no query, no error box)
+# until PIPE_DATABASE.<schema>.CASE_SUMMARY is readable by this role. After that
+# the guard switches itself off. Every other schema goes straight to run_query.
+import time as _time
+
+WATCH_SCHEMAS = {"ONEOCEAN_PUBLIC"}
+_READY_SCHEMAS = set()
+_orig_run_query = run_query
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def _probe_schema(schema: str, bucket: int) -> bool:
+    try:
+        df = _orig_run_query(
+            "SELECT COUNT(*) AS cnt FROM PIPE_DATABASE.information_schema.tables "
+            f"WHERE table_schema = '{schema}' AND table_name = 'CASE_SUMMARY' "
+            f"/* probe {bucket} */",
+            schema,
+        )
+        return (not df.empty) and int(df.iloc[0, 0]) > 0
+    except Exception:
+        return False
+
+
+def snowflake_pending(schema: str) -> bool:
+    if schema not in WATCH_SCHEMAS or schema in _READY_SCHEMAS:
+        return False
+    if _probe_schema(schema, int(_time.time() // 3600)):
+        _READY_SCHEMAS.add(schema)
+        return False
+    return True
+
+
+def run_query(*args, **kwargs):
+    schema = kwargs.get("schema") if "schema" in kwargs else (args[1] if len(args) > 1 else None)
+    if schema and snowflake_pending(schema):
+        return pd.DataFrame()
+    return _orig_run_query(*args, **kwargs)
+
+
+run_query.clear = getattr(_orig_run_query, "clear", lambda: None)

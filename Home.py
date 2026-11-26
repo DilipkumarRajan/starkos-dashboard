@@ -163,6 +163,29 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# -- Snowflake-pending notice: only triggers for schemas in WATCH_SCHEMAS ------
+try:
+    from utils.snowflake_conn import snowflake_pending as _sf_pending
+    _pending = _sf_pending(customer.get("schema", ""))
+except Exception:
+    _pending = False
+if _pending:
+    st.info(
+        f"Snowflake data for {st.session_state.get('selected_customer', 'this account')} "
+        "isn't available yet. The Pendo, TAM and Portfolio tabs work now; the other tabs "
+        "fill in automatically once the schema is synced.",
+        icon="ℹ️",
+    )
+    _t = st.session_state.get("active_tab", 0)
+    if _t == 0:
+        try:
+            from utils.pendo_snapshot import render_pendo_only_snapshot
+            render_pendo_only_snapshot(customer, customer_name)
+        except Exception as _e:
+            st.warning(f"Pendo snapshot unavailable: {_e}")
+    if _t in (0, 1, 2, 3, 4, 5, 6):
+        st.stop()
+
 # ── Route to active tab ───────────────────────────────────────────────────────
 tab = st.session_state.active_tab
 
@@ -332,9 +355,12 @@ if tab == 0:
                 _dp = get_page_views(_pids[0], 30)
             # Filter to iframe pages only
             if not _dp.empty and "pageId" in _dp.columns:
-                _page_map = get_page_map() if "get_page_map" in dir() else {}
+                from utils.pendo_conn import get_page_map as _get_page_map
+                _page_map = _get_page_map()
+                if not _page_map:
+                    raise RuntimeError('Pendo page map unavailable')
                 _iframe_df = _dp[_dp["pageId"].map(
-                    lambda x: "[IFrame]" in str(_page_map.get(x, x))
+                    lambda x: "[iframe]" in str(_page_map.get(x, x)).lower()
                 )] if _page_map else _dp
                 _imau = _iframe_df["visitorId"].nunique() if not _iframe_df.empty else 0
             else:

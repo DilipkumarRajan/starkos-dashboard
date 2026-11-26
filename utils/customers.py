@@ -710,4 +710,18 @@ CUSTOMERS = {
         "benchmark_escalation_pct": 2.0,
     },
 
+    "OneOcean": {
+        "schema":    "ONEOCEAN_PUBLIC",
+        "pendo_id":  "OneOcean",
+        "pendo_ids": ["OneOcean", "Oneocean", "oneocean"],
+        "go_live":   None,
+        "csm":       "",
+        "sa":        "",
+        "license":   "CoreSX",
+        "goals":     [],
+        "notes":     "Multi-CRM instance. Snowflake schema not created yet (EO-18277) - fills in automatically once readable.",
+        "gcp_hostname": "oneocean",
+        "benchmark_escalation_pct": 2.0,
+    },
+
 }

@@ -65,6 +65,7 @@ CUSTOMER_SEARCH_MAP = {
     "Perforce":           "Perforce",
     "Gigamon":            "Gigamon",
     "Kyriba":             "Kyriba",
+    "OneOcean":           "OneOcean",
 }
 
 
